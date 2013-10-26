@@ -1,0 +1,49 @@
+#include<opencv2/opencv.hpp>
+#include<iostream>
+#include<vector>
+using namespace cv;
+
+int main(int argc, char *argv[])
+{
+	Mat frame;
+    Mat back;
+    Mat fore;
+    VideoCapture cap(0);
+    BackgroundSubtractorMOG2 bg;
+    bg.nmixtures = 3;
+    bg.bShadowDetection = false;
+    bg.nShadowDetection=0;
+    bg.varThreshold=16;
+    //bg.history=1000;
+    std::vector<std::vector<Point> > contours;
+
+    namedWindow("Frame");
+    namedWindow("Background");
+
+    for(;;)
+    {
+        cap >> frame;
+        Mat substracted(frame.rows,frame.cols,CV_8UC3);
+        substracted.setTo(Scalar(0,0,0));
+        bg.operator ()(frame,fore,0.01);
+        bg.getBackgroundImage(back);
+     //   subtract(frame,back,fore);
+
+        erode(fore,fore,Mat());
+      //  dilate(fore,fore,Mat());
+     findContours(fore,contours,CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
+       drawContours(frame,contours,-1,Scalar(0,0,255),2);
+    //    imshow("Frame",fore);
+   //    frame.copyTo(substracted,fore);
+      //  normalize(fore.clone(), fore, 0.0, 255.0, CV_MINMAX, CV_8UC1);
+
+
+       frame.copyTo(substracted,fore);
+       imshow("Frame",frame);
+
+        imshow("Background",back);
+
+        if(waitKey(30) >= 0) break;
+    }
+    return 0;
+}
