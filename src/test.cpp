@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 {
 	Mat frame;
 	Mat foreground;
+	Mat foreground_denoised;
 	Mat skin;
 	Mat background;
 	Mat foreground_with_contours;
@@ -46,8 +47,8 @@ int main(int argc, char *argv[])
 
 
 
-	//	foreground=simple_noise_reduction(skin);
-		skin.copyTo(foreground_with_contours);
+		foreground_denoised=simple_noise_reduction(foreground.clone());
+		foreground.copyTo(foreground_with_contours);
 		findContours(foreground_with_contours,contours,CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
 
 
@@ -67,10 +68,10 @@ int main(int argc, char *argv[])
 
 
 
-		imshow(window_name,foreground);
-		imshow("1",foreground_with_contours);
+		imshow(window_name,frame);
+		imshow("1",foreground);
 
-		imshow("2",frame);
+		imshow("2",foreground_denoised);
 
 
 		if(waitKey(30) >= 0) break;

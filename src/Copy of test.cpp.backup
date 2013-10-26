@@ -1,49 +1,27 @@
 #include<opencv2/opencv.hpp>
 #include<iostream>
 #include<vector>
+#include <stdio.h>
+#include "noise_reduction.hpp"
+
 using namespace cv;
 
 int main(int argc, char *argv[])
 {
-	Mat frame;
-    Mat back;
-    Mat fore;
-    VideoCapture cap(0);
-    BackgroundSubtractorMOG2 bg;
-    bg.nmixtures = 3;
-    bg.bShadowDetection = false;
-    bg.nShadowDetection=0;
-    bg.varThreshold=16;
-    //bg.history=1000;
-    std::vector<std::vector<Point> > contours;
+	Mat img;
+	Mat img2;
 
-    namedWindow("Frame");
-    namedWindow("Background");
+	namedWindow("1",0);
+	namedWindow("2",0);
 
-    for(;;)
-    {
-        cap >> frame;
-        Mat substracted(frame.rows,frame.cols,CV_8UC3);
-        substracted.setTo(Scalar(0,0,0));
-        bg.operator ()(frame,fore,0.01);
-        bg.getBackgroundImage(back);
-     //   subtract(frame,back,fore);
+	img=imread("/home/raiton/Bureau/Test_screenshot_26.10.2013.png",0);
 
-        erode(fore,fore,Mat());
-      //  dilate(fore,fore,Mat());
-     findContours(fore,contours,CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
-       drawContours(frame,contours,-1,Scalar(0,0,255),2);
-    //    imshow("Frame",fore);
-   //    frame.copyTo(substracted,fore);
-      //  normalize(fore.clone(), fore, 0.0, 255.0, CV_MINMAX, CV_8UC1);
+	imshow("1",img);
 
+	img2= simple_noise_reduction(img);
+	imshow("2",img2);
 
-       frame.copyTo(substracted,fore);
-       imshow("Frame",frame);
+	waitKey(300000);
 
-        imshow("Background",back);
-
-        if(waitKey(30) >= 0) break;
-    }
     return 0;
 }
