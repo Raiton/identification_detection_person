@@ -8,7 +8,6 @@
 #include<opencv2/opencv.hpp>
 #include<iostream>
 #include<vector>
-#include "background_substract.hpp"
 #include <opencv2/nonfree/features2d.hpp>
 #include "noise_reduction.hpp"
 #include "skin_detection.hpp"

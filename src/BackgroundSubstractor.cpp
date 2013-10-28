@@ -37,8 +37,6 @@ Mat Background_Substractor::Running_Average(Mat frame) {
 	cvtColor(frame, frame_gray, CV_BGR2GRAY);
 	Mat fore(frame_gray.rows, frame_gray.cols, CV_8U);
 	fore.setTo(0);
-	namedWindow("Z", CV_WINDOW_AUTOSIZE);
-	imshow("Z", back_gray);
 
 	threshold(d0(frame_gray, back_gray), fore, threshold_limit, 255,
 			THRESH_BINARY);
@@ -52,7 +50,7 @@ Mat Background_Substractor::Running_Average(Mat frame) {
 
 Mat Background_Substractor::Frame_diff(Mat frame) {
 
-	double threshold_limit = 30;
+	double threshold_limit =50;
 	Mat frame_gray;
 	Mat temp;
 	//learning rate
@@ -65,7 +63,7 @@ Mat Background_Substractor::Frame_diff(Mat frame) {
 	fore.setTo(0);
 	cvtColor(frame, frame_gray, CV_BGR2GRAY);
 
-	threshold(d0(frame_gray, initial_background_gray), fore, threshold_limit,
+	threshold(d1(frame, initial_background), fore, threshold_limit,
 			255, THRESH_BINARY);
 
 

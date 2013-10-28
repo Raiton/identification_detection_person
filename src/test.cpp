@@ -1,7 +1,6 @@
 #include<opencv2/opencv.hpp>
 #include<iostream>
 #include<vector>
-#include "background_substract.hpp"
 #include <opencv2/nonfree/features2d.hpp>
 #include "noise_reduction.hpp"
 #include "skin_detection.hpp"
@@ -24,9 +23,11 @@ int main(int argc, char *argv[])
 	String window_name="Test";
 
 	namedWindow( window_name, CV_WINDOW_AUTOSIZE );
-	namedWindow( "1", CV_WINDOW_AUTOSIZE );
+	namedWindow( "foreground", CV_WINDOW_AUTOSIZE );
+	//namedWindow( "denoised", CV_WINDOW_AUTOSIZE );
 
-	namedWindow( "2", CV_WINDOW_AUTOSIZE );
+
+	namedWindow( "skin", CV_WINDOW_AUTOSIZE );
 
 
 
@@ -47,10 +48,11 @@ int main(int argc, char *argv[])
 
 
 
-		foreground_denoised=simple_noise_reduction(foreground.clone());
+		//foreground_denoised=simple_noise_reduction(foreground.clone());
 		foreground.copyTo(foreground_with_contours);
 		findContours(foreground_with_contours,contours,CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
 
+		//needs object grouping algorithm maybe blob
 
 	     for (uint i = 0; i< contours.size(); i++)
 	     {
@@ -69,9 +71,10 @@ int main(int argc, char *argv[])
 
 
 		imshow(window_name,frame);
-		imshow("1",foreground);
+		imshow("foreground",foreground);
+		imshow("skin",skin);
+		//imshow("denoised",foreground_denoised);
 
-		imshow("2",foreground_denoised);
 
 
 		if(waitKey(30) >= 0) break;
